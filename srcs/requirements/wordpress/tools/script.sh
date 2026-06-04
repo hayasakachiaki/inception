@@ -29,9 +29,10 @@ if [ ! -f /var/www/html/wp-config.php ]; then
 	cp /wp-config.php /var/www/html/wp-config.php
 fi
 
-sed -i -r "s/define\( 'DB_NAME', '.*' \);/define( 'DB_NAME', '$db_name' );/" wp-config.php
-sed -i -r "s/define\( 'DB_USER', '.*' \);/define( 'DB_USER', '$db_user' );/" wp-config.php
-sed -i -r "s/define\( 'DB_PASSWORD', '.*' \);/define( 'DB_PASSWORD', '$db_pwd' );/" wp-config.php
+wp config set DB_NAME "$db_name" --allow-root
+wp config set DB_USER "$db_user" --allow-root
+wp config set DB_PASSWORD "$db_pwd" --allow-root
+
 
 for i in $(seq 1 30); do
 	if php -r '$db = @mysqli_connect("mariadb", getenv("db_user"), getenv("db_pwd"), getenv("db_name")); exit($db ? 0 : 1);'; then
